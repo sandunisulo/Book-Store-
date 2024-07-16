@@ -9,6 +9,8 @@
           rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
           crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -25,57 +27,57 @@
                     <a class="nav-link active" aria-current="page" th:href="@{/register}">Register</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" th:href="@{/addBook}">Add Book</a>
+                    <a class="nav-link active" aria-current="page" th:href="@{/adminHome}">Admin Home</a>
                 </li>
+                            <li class="nav-item">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Categories
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" th:href="@{/index}" th:text="'All Categories'"></a>
+                                    <div th:each="category : ${categories}">
+                                        <a class="dropdown-item" th:href="@{/index(categoryId=${category.id})}" th:text="${category.name}"></a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+
             </ul>
+
         </div>
     </div>
 </nav>
 <br /><br />
+
 <div class="container">
     <div class="row">
         <h1 class="text-center"> Book Store</h1>
     </div>
-    <div class="col-3">
+    <div>
         <th:block th:if="${books == null && books.isEmpty()}">
             There is no books currently in store!
         </th:block>
-        <th:block th:if="${books != null && !books.isEmpty()}">
-
-            <div class="card-deck"
-                 style="display: flex; justify-content: space-around; margin-top: 20px;">
-                <div class="col-sm-2"
-                     style="max-width: 32rem; display: inline-block; width: 15rem;"
-                     th:each="book, iStat : ${books}">
-                    <div class="card text-white bg-success"
-                         style="width: 20rem; margin-bottom: 50px">
-
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${book.name}"></h5>
-                            <p class="card-text" th:text="${book.author}"></p>
+        <div class="container">
+            <div class="row">
+                <th:block th:if="${books != null && !books.isEmpty()}">
+                    <div th:each="book, iStat : ${books}" class="col-md-4 mb-4">
+                        <div class="card" style="color: black; font-family: Arial, sans-serif;background-color:  lightblue;">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${book.name}"></h5>
+                                <p class="card-text" th:text="${book.author}"></p>
+                                <i class="font-weight-bold align-middle" th:text="${book.price} + ' Rs'"></i>
+                            </div>
                         </div>
-
-                        <div class="card-footer" style="display: inline">
-                            <i class="font-weight-bold align-middle"
-                               th:text="${book.price} + ' ' + 'Rs'"></i>
-                        </div>
-                        <span th:text="${book.refernceNumber}"><br></span>
                     </div>
-                </div>
+                </th:block>
             </div>
-            <div th:if="${bookPage.totalPages > 0}" class="pagination"
-                 th:each="pageNumber : ${pageNumbers}">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item font-weight-bold"><a
-                                th:href="@{/(size=${bookPage.size}, page=${pageNumber})}"
-                                th:text=${pageNumber} th:class="page-link"></a></li>
-                    </ul>
-                </nav>
-            </div>
-        </th:block>
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

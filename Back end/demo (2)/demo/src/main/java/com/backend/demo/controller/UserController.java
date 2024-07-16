@@ -28,25 +28,6 @@ public class UserController {
     private BookService bookService;
 
 
-    // handler method to handle home page request
-    @GetMapping("/index")
-    public String home(Model model){
-        System.out.println("Entering showBook method");
-        List<BookDto> books = bookService.findAllBooks();
-        if (books == null) {
-            System.out.println("Books list is null.");
-        } else if (books.isEmpty()) {
-            System.out.println("Books list is empty.");
-        } else {
-            System.out.println("Books list size: " + books.size());
-            System.out.println("Author of the first book: " + books.get(0).getAuthor());
-        }
-        model.addAttribute("books",books);
-        System.out.println("out going showBook method");
-        return "index";
-    }
-
-
     @GetMapping("/login")
     public String login(Model model){
         UserLoginDto user = new UserLoginDto();

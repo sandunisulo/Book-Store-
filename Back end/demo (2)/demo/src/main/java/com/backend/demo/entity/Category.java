@@ -11,19 +11,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "book")
-public class Book {
-
+@Table(name = "category")
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private Long bookCatId;
     private String name;
-    private String author;
-    private String price;
-    private String refernceNumber;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
 }
