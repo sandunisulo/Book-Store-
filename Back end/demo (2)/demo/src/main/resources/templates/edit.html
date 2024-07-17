@@ -59,15 +59,23 @@
                         method="post"
                         role="form"
                         th:action="@{/editBooks/edit/check}"
-                        th:object="${newBook}"
+                        th:object="${book}"
                 >
+                    <input
+                            class="form-control"
+                            id="id"
+                            name="id"
+                            th:field="*{id}"
+                            type="text"
+                            readonly
+                    />
                     <div class="form-group mb-3">
                         <label class="form-label">Book Name</label>
                         <input
                                 class="form-control"
                                 id="name"
                                 name="name"
-                                value="${book.name}"
+                                placeholder="Enter book name"
                                 th:field="*{name}"
                                 type="text"
                         />
@@ -104,20 +112,16 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="category">Category:</label>
-                        <select id="category" th:field="*{category}">
-                            <option value="" disabled selected>Select a category</option>
-                            <option value="Fiction">Fiction</option>
-                            <option value="Non-Fiction">Non-Fiction</option>
-                            <option value="Children's Books">Children's Books</option>
-                            <option value="Educational">Educational</option>
-                            <option value="Genres by Theme">Genres by Theme</option>
-                            <option value="Religion & Spirituality">Religion & Spirituality</option>
-                            <option value="Hobbies & Interests">Hobbies & Interests</option>
-                            <option value="Specialized Categories">Specialized Categories</option>
-                            <option value="Language & Literature">Language & Literature</option>
-                            <option value="Miscellaneous">Miscellaneous</option>
-                            <option value="E-books & Audiobooks">E-books & Audiobooks</option>
-                        </select>
+                        <div class="form-group mb-3">
+                            <label class="form-label">Author</label>
+                            <input
+                                    class="form-control"
+                                    id="category"
+                                    name="category"
+                                    placeholder="category"
+                                    th:field="*{category}"
+                                    type="text"
+                            />
                     </div>
 
                     <div class="form-group mb-3">
@@ -134,7 +138,7 @@
                            th:if="${#fields.hasErrors('refernceNumber')}"></p>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-primary" type="submit">Add Book</button>
+                        <button class="btn btn-primary" type="submit">Edit Book Details</button>
 
                     </div>
                 </form>

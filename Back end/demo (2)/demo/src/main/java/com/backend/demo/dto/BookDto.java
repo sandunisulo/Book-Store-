@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookDto {
+    private Long id;
     @NotEmpty(message="Name cannot be empty")
     private String name;
     @NotEmpty(message = "Author can not be empty")

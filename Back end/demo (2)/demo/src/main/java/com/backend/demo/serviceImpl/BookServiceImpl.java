@@ -1,18 +1,16 @@
 package com.backend.demo.serviceImpl;
 
 import com.backend.demo.dto.BookDto;
-import com.backend.demo.dto.CategoryDto;
 import com.backend.demo.entity.Book;
 import com.backend.demo.entity.Category;
 import com.backend.demo.repository.BookRepository;
 import com.backend.demo.repository.CategoryRepository;
 import com.backend.demo.service.BookService;
-import com.backend.demo.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +27,13 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findByName(bookName);
     }
 
+    @Override
+    public BookDto findBookGetDto(String bookName){
 
+        Book book =  bookRepository.findByName(bookName);
+        BookDto bookDto = mapToBookDto(book);
+        return bookDto;
+    }
 
 
     @Override
@@ -62,6 +66,7 @@ public class BookServiceImpl implements BookService {
         BookDto bookDto = new BookDto();
         bookDto.setName(book.getName());
         bookDto.setAuthor(book.getAuthor());
+        bookDto.setId(book.getId());
         bookDto.setCategory(book.getCategory().getName());
         bookDto.setPrice(book.getPrice());
         bookDto.setRefernceNumber(book.getRefernceNumber());
@@ -84,5 +89,25 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteBook(Book book){
         bookRepository.delete(book);
+    }
+
+    @Override
+    public void editBook(BookDto bookDto){
+        Book book = bookRepository.findByName(bookDto.getName());
+        //Long a = 2L;
+        //bookRepository.editBookDetails(a,bookDto.getName(),bookDto.getAuthor(),bookDto.getPrice());
+
+    }
+
+    @Override
+    public Book getBookById(Long id){
+        Optional<Book> book =  bookRepository.findById(id);
+        if (book.isPresent()) {
+            return book.get();
+        } else {
+            Book book1 = new Book();
+            return book1;
+        }
+
     }
 }

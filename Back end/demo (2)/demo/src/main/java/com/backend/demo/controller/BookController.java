@@ -1,6 +1,7 @@
 package com.backend.demo.controller;
 
 import com.backend.demo.dto.BookDto;
+import com.backend.demo.dto.EditBookDto;
 import com.backend.demo.entity.Book;
 import com.backend.demo.entity.Category;
 import com.backend.demo.service.BookService;
@@ -11,8 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class BookController {
@@ -108,27 +111,39 @@ public class BookController {
     }
 
     @GetMapping("/editBooks/edit/{name}")
-    public String editBook(@PathVariable("name") String name,
-                           Model model
+    public ModelAndView editBook(@PathVariable("name") String name,
+                                 Model model
                             ){
-        BookDto bookDto = new BookDto();
-        Book book = bookService.findBook(name);
-        bookDto.setName(book.getName());
-        bookDto.setCategory(book.getCategory().getName());
-        bookDto.setPrice(book.getPrice());
-        bookDto.setAuthor(book.getAuthor());
-        Long bookId = book.getId();
+        ModelAndView modelAndView = new ModelAndView("edit");
+        BookDto bookDto = bookService.findBookGetDto(name);
+        modelAndView.addObject("book" , bookDto);
 
-        model.addAttribute(bookDto);
-        model.addAttribute(bookId);
-        return "edit";
+        return modelAndView;
     }
 
     @PostMapping("/editBooks/edit/check")
     public String editCheck(@Valid @ModelAttribute("newBook") BookDto bookDto,
                             BindingResult result,
                             Model model){
-        return "";
+        Book book = bookService.getBookById(bookDto.getId());
+        bookService.deleteBook(book);
+        Book existingBook = bookService.findBook(bookDto.getName());
+
+        Category existingCategory = categoryService.getCategoryByName(bookDto.getCategory());
+        if(existingCategory == null){
+            Category category = new Category();
+            category.setName(bookDto.getCategory());
+            category.setBookCatId(categoryService.generateUniqueReferenceNumber());
+            System.out.println("save category in");
+            categoryService.save(category);
+            System.out.println("save book in");
+            bookService.saveBook(bookDto,categoryService.getCategoryByName(bookDto.getCategory()));
+
+        } else{
+            bookService.saveBook(bookDto,existingCategory);
+
+        }
+        return "redirect:/editBooks";
     }
 
     @GetMapping("/editBooks/delete/{name}")
